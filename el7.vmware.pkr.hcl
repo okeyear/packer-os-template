@@ -16,13 +16,15 @@ variable "hardware_version" {
 variable "iso_url" {
   type        = string
   description = "The ISO file."
-  default = "file://D:/ISO/Linux/rhel-server-7.9-x86_64-dvd.iso"
+  # default = "file://D:/ISO/Linux/rhel-server-7.9-x86_64-dvd.iso"
+  default = "https://mirrors.aliyun.com/centos/7/isos/x86_64/CentOS-7-x86_64-Everything-2207-02.iso?spm=a2c6h.25603864.0.0.74092d1cBNle2S"
 }
 
 variable "iso_checksum" {
   type        = string
   description = "The ISO checksum file."
-  default = "19D653CE2F04F202E79773A0CBEDA82070E7527557E814EBBCE658773FBE8191"
+  # default = "19D653CE2F04F202E79773A0CBEDA82070E7527557E814EBBCE658773FBE8191"
+  default = "f3f83472a24c8ebc66c81b346a743f4000b6b6ddf8c0eb098422d41476873b3b"
 }
 
 source "vmware-iso" "vmware-iso" {
