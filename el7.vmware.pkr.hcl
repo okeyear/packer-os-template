@@ -48,11 +48,11 @@ source "vmware-iso" "vmware-iso" {
 
 build {
   sources = ["source.vmware-iso.vmware-iso"]
-  post-processors {
-    post-processor "shell-local" {
-      scripts = fileset(".", "scripts/{sshd,cleanup}.sh")
-    }
-  }
+  # post-processors {
+  #   post-processor "shell-local" {
+  #     scripts = fileset(".", "scripts/{sshd,cleanup}.sh")
+  #   }
+  # }
 }
 
 

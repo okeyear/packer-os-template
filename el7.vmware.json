@@ -1,0 +1,28 @@
+{
+    "_comment": "Build with `packer build -only=vmware-iso el7.vmware.json` # centos-64 ",
+    "builders": [
+      {
+        "type": "vmware-iso",
+        "version": "15",
+        "boot_command": [
+          "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/el7.ks.cfg <enter><wait>"
+        ],
+        "boot_wait": "10s",
+        "iso_url": "file://D:/ISO/Linux/rhel-server-7.9-x86_64-dvd.iso",
+        "iso_checksum": "19D653CE2F04F202E79773A0CBEDA82070E7527557E814EBBCE658773FBE8191",
+        "ssh_username": "vagrant",
+        "ssh_password": "vagrant",
+        "ssh_port": 22,
+        "ssh_wait_timeout": "10000s",
+        "tools_upload_flavor": "linux",
+        "guest_os_type": "rhel7-64",
+        "shutdown_command": "echo 'vagrant'|sudo -S /sbin/halt -h -p",
+        "vm_name": "packer-rhel7-os-template",
+        "cpus": "1",
+        "memory": "1024",
+        "disk_size": "20480",
+        "format": "ova",
+        "http_directory": "http"
+      }
+    ]
+  }
