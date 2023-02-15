@@ -34,6 +34,8 @@ variables {
   vagrant_boot_command_8_x86_64 = [
     "<tab> inst.text inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/el8.vagrant.ks<enter><wait>"
   ]
+
+  # LABEL=RHEL-8-7-0-BaseOS-x86_64
   vagrant_boot_command_8_x86_64_uefi = [
     "c<wait>",
     "linuxefi /images/pxeboot/vmlinuz inst.stage2=hd:LABEL=AlmaLinux-8-7-x86_64-dvd ro ",
