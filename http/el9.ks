@@ -24,18 +24,22 @@ bootloader --location=mbr
 
 %pre --erroronfail
 
+# autopart --type=lvm
 parted -s -a optimal /dev/sda -- mklabel gpt
 parted -s -a optimal /dev/sda -- mkpart biosboot 1MiB 2MiB set 1 bios_grub on
 parted -s -a optimal /dev/sda -- mkpart '"EFI System Partition"' fat32 2MiB 202MiB set 2 esp on
-parted -s -a optimal /dev/sda -- mkpart boot xfs 202MiB 714MiB
-parted -s -a optimal /dev/sda -- mkpart root xfs 714MiB 100%
-
+parted -s -a optimal /dev/sda -- mkpart boot xfs 202MiB 1226MiB
+# parted -s -a optimal /dev/sda -- mkpart root xfs 1226MiB 100%
 %end
 
 part biosboot --fstype=biosboot --onpart=sda1
 part /boot/efi --fstype=efi --onpart=sda2
 part /boot --fstype=xfs --onpart=sda3
-part / --fstype=xfs --onpart=sda4
+# part / --fstype=xfs --onpart=sda4
+part pv.01 --size=1 --grow
+volgroup vg pv.01
+logvol swap --vgname=vg --name=lv_swap --size=4096 # --recommended # --ondisk=sda
+logvol / --vgname=vg --name=lv_root --fstype xfs --size=1 --grow
 
 
 rootpw vagrant

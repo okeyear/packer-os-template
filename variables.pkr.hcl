@@ -26,13 +26,17 @@ variables {
   //
   // Hyper-V specific variables
   //
-  hyperv_switch_name = "Default_Switch"
+  # need external switch, for example , br-wifi
+  hyperv_switch_name = ""
 
   //
   // Vagrant specific variables
   //
+  # rhel iso label: RHEL-9-1-0-BaseOS-x86_64
+  # alma iso label: AlmaLinux-8-7-x86_64-dvd AlmaLinux-9-1-x86_64-dvd "linuxefi /images/pxeboot/vmlinuz inst.stage2=hd:LABEL=AlmaLinux-8-7-x86_64-dvd ro ",
+  # rocky iso label:
   vagrant_boot_command_8_x86_64 = [
-    "<tab> inst.text inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/el8.vagrant.ks<enter><wait>"
+    "<tab> inst.text inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/el8.ks<enter><wait>"
   ]
 
   # LABEL=RHEL-8-7-0-BaseOS-x86_64
@@ -40,22 +44,22 @@ variables {
     "c<wait>",
     "linuxefi /images/pxeboot/vmlinuz inst.stage2=hd:LABEL=AlmaLinux-8-7-x86_64-dvd ro ",
     "inst.text biosdevname=0 net.ifnames=0 ",
-    "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/el8.vagrant.ks<enter>",
+    "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/el8.ks<enter>",
     "initrdefi /images/pxeboot/initrd.img<enter>",
     "boot<enter><wait>"
   ]
   vagrant_boot_command_9_x86_64 = [
-    "<tab> inst.text inst.gpt inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/el9.vagrant.ks<enter><wait>"
+    "<tab> inst.text inst.gpt inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/el9.ks<enter><wait>"
   ]
   vagrant_boot_command_9_x86_64_uefi = [
     "c<wait>",
     "linuxefi /images/pxeboot/vmlinuz inst.stage2=hd:LABEL=AlmaLinux-9-1-x86_64-dvd ro ",
     "inst.text biosdevname=0 net.ifnames=0 ",
-    "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/el9.vagrant.ks<enter>",
+    "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/el9.ks<enter>",
     "initrdefi /images/pxeboot/initrd.img<enter>",
     "boot<enter><wait>"
   ]
-  vagrant_disk_size        = 20000
+  vagrant_disk_size        = 20480
   vagrant_shutdown_command = "echo vagrant | sudo -S /sbin/shutdown -hP now"
   vagrant_ssh_username     = "vagrant"
   vagrant_ssh_password     = "vagrant"
