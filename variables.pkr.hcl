@@ -26,7 +26,7 @@ variables {
   //
   // Hyper-V specific variables
   //
-  hyperv_switch_name = ""
+  hyperv_switch_name = "Default_Switch"
 
   //
   // Vagrant specific variables
