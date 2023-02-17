@@ -6,8 +6,8 @@ variables {
   iso_checksum_8_x86_64  = "file:https://repo.almalinux.org/almalinux/8.7/isos/x86_64/CHECKSUM"
   iso_url_9_x86_64       = "file://D:/ISO/rhel-baseos-9.1-x86_64-dvd.iso"
   iso_checksum_9_x86_64  = "D9DCAE2B6E760D0F9DCF4A517BDDC227D5FA3F213A8323592F4A07A05AA542A2"
-  headless               = true
-  boot_wait              = "10s"
+  headless               = false
+  boot_wait              = "40s"
   cpus                   = 2
   memory                 = 2048
   post_cpus              = 1
@@ -50,14 +50,6 @@ variables {
   ]
   vagrant_boot_command_9_x86_64 = [
     "<tab> inst.text inst.gpt inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/el9.ks<enter><wait>"
-  ]
-  vagrant_boot_command_9_x86_64_uefi = [
-    "c<wait>",
-    "linuxefi /images/pxeboot/vmlinuz inst.stage2=hd:LABEL=AlmaLinux-9-1-x86_64-dvd ro ",
-    "inst.text biosdevname=0 net.ifnames=0 ",
-    "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/el9.ks<enter>",
-    "initrdefi /images/pxeboot/initrd.img<enter>",
-    "boot<enter><wait>"
   ]
   vagrant_disk_size        = 20480
   vagrant_shutdown_command = "echo vagrant | sudo -S /sbin/shutdown -hP now"
