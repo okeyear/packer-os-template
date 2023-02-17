@@ -77,9 +77,9 @@ source "vmware-iso" "el9" {
 
 build {
   sources = [
-    "sources.hyperv-iso.el9"
+    # "sources.hyperv-iso.el9"
     # "sources.virtualbox-iso.el9"
-    # "sources.vmware-iso.el9"
+     "sources.vmware-iso.el9"
   ]
 
   provisioner "shell" {

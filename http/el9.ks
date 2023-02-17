@@ -32,23 +32,12 @@ services --enabled=sshd
 selinux --disabled
 # selinux --enforcing
 
-bootloader --location=mbr --append=" net.ifnames=0 biosdevname=0 crashkernel=no"
+bootloader --append=" net.ifnames=0 biosdevname=0 crashkernel=no" # --location=mbr
 # bootloader --append="rhgb quiet crashkernel=1G-4G:192M,4G-64G:256M,64G-:512M"
 
 
 
 ######### disk partation, 1. manual create 
-# Generated using Blivet version 3.4.0
-ignoredisk --only-use=sda
-# Partition clearing information
-clearpart --none --initlabel
-# Disk partitioning information
-part /boot/efi --fstype="efi" --ondisk=sda --size=200 --fsoptions="umask=0077,shortname=winnt"
-part /boot --fstype="xfs" --ondisk=sda --size=1024
-part pv.01 --fstype="lvmpv" --ondisk=sda --size=1 --grow
-volgroup vg pv.01 --pesize=4096 
-# logvol swap --vgname=vg --name=lv_swap --size=4096 # --recommended # --ondisk=sda
-logvol / --fstype="xfs" --name=lv_root --vgname=vg --size=1 --grow
 
 #### 2. auto part
 # Clear the Master Boot Record
@@ -59,17 +48,31 @@ logvol / --fstype="xfs" --name=lv_root --vgname=vg --size=1 --grow
 # autopart --type=lvm
 
 #### 3. refer almalinux: https://github.com/AlmaLinux/cloud-images
-# %pre --erroronfail
-# parted -s -a optimal /dev/sda -- mklabel gpt
-# parted -s -a optimal /dev/sda -- mkpart biosboot 1MiB 2MiB set 1 bios_grub on
-# parted -s -a optimal /dev/sda -- mkpart '"EFI System Partition"' fat32 2MiB 202MiB set 2 esp on
-# parted -s -a optimal /dev/sda -- mkpart boot xfs 202MiB 1226MiB
-# parted -s -a optimal /dev/sda -- mkpart root xfs 1226MiB 100%
-# %end 
-# part biosboot --fstype=biosboot --onpart=sda1
-# part /boot/efi --fstype=efi --onpart=sda2
-# part /boot --fstype=xfs --onpart=sda3
-# part / --fstype=xfs --onpart=sda4
+# Generated using Blivet version 3.4.0
+ignoredisk --only-use=sda
+# Partition clearing information
+clearpart --none --initlabel
+# autopart --type=lvm
+
+%pre # --log=/root/pre_log # --erroronfail
+/usr/bin/dd bs=512 count=10 if=/dev/zero of=/dev/sda
+/usr/sbin/parted -s -a optimal /dev/sda -- mklabel gpt
+# /usr/sbin/parted -s -a optimal /dev/sda -- mkpart biosboot 1MiB 2MiB set 1 bios_grub on
+# /usr/sbin/parted -s -a optimal /dev/sda -- mkpart '"EFI System Partition"' fat32 2MiB 202MiB set 2 esp on
+# /usr/sbin/parted -s -a optimal /dev/sda -- mkpart boot xfs 202MiB 1226MiB
+# /usr/sbin/parted -s -a optimal /dev/sda -- mkpart root xfs 1226MiB 100%
+/usr/sbin/parted --script /dev/sda print 
+/usr/bin/sleep  60
+%end 
+
+# Disk partitioning information
+part biosboot --fstype=biosboot --ondisk=sda --label=biosboot --size=1 #  --recommended  # 
+part /boot/efi --fstype="efi" --ondisk=sda --size=200 --fsoptions="umask=0077,shortname=winnt" 
+part /boot --fstype="xfs" --ondisk=sda --size=1024
+part pv.01 --fstype="lvmpv" --ondisk=sda --size=1 --grow
+volgroup vg pv.01 --pesize=4096 
+# logvol swap --vgname=vg --name=lv_swap --size=4096 # --recommended # --ondisk=sda
+logvol / --fstype="xfs" --name=lv_root --vgname=vg --size=1 --grow
 
 
 rootpw vagrant
