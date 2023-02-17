@@ -37,9 +37,14 @@ bootloader --append=" net.ifnames=0 biosdevname=0 crashkernel=no" # --location=m
 
 
 
-######### disk partation, 1. manual create 
+######### disk partation
+# Generated using Blivet version 3.4.0
+ignoredisk --only-use=sda
+# Partition clearing information
+clearpart --none --initlabel
 
-#### 2. auto part
+######### 1. auto part
+#### 1. auto part
 # Clear the Master Boot Record
 # zerombr
 # Remove partitions
@@ -47,14 +52,9 @@ bootloader --append=" net.ifnames=0 biosdevname=0 crashkernel=no" # --location=m
 # Automatically create partitions using LVM
 # autopart --type=lvm
 
-#### 3. refer almalinux: https://github.com/AlmaLinux/cloud-images
-# Generated using Blivet version 3.4.0
-ignoredisk --only-use=sda
-# Partition clearing information
-clearpart --none --initlabel
-# autopart --type=lvm
-
-%pre # --log=/root/pre_log # --erroronfail
+######### disk partation, 2. manual create 
+#### 2. refer almalinux: https://github.com/AlmaLinux/cloud-images
+%pre --log=/root/pre_log # --erroronfail
 /usr/bin/dd bs=512 count=10 if=/dev/zero of=/dev/sda
 /usr/sbin/parted -s -a optimal /dev/sda -- mklabel gpt
 # /usr/sbin/parted -s -a optimal /dev/sda -- mkpart biosboot 1MiB 2MiB set 1 bios_grub on
