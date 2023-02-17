@@ -52,7 +52,7 @@ clearpart --none --initlabel
 # Automatically create partitions using LVM
 # autopart --type=lvm
 
-######### disk partation, 2. manual create 
+######### disk partation, 2. manual create , must include 1M biosboot partation
 #### 2. refer almalinux: https://github.com/AlmaLinux/cloud-images
 %pre --log=/root/pre_log # --erroronfail
 /usr/bin/dd bs=512 count=10 if=/dev/zero of=/dev/sda
@@ -62,15 +62,18 @@ clearpart --none --initlabel
 # /usr/sbin/parted -s -a optimal /dev/sda -- mkpart boot xfs 202MiB 1226MiB
 # /usr/sbin/parted -s -a optimal /dev/sda -- mkpart root xfs 1226MiB 100%
 /usr/sbin/parted --script /dev/sda print 
-/usr/bin/sleep  60
+/usr/bin/sleep  30
 %end 
 
 # Disk partitioning information
 part biosboot --fstype=biosboot --ondisk=sda --label=biosboot --size=1 #  --recommended  # 
 part /boot/efi --fstype="efi" --ondisk=sda --size=200 --fsoptions="umask=0077,shortname=winnt" 
 part /boot --fstype="xfs" --ondisk=sda --size=1024
+# pvcreate
 part pv.01 --fstype="lvmpv" --ondisk=sda --size=1 --grow
-volgroup vg pv.01 --pesize=4096 
+# vgcreate
+volgroup vg pv.01 # --pesize=4096
+# lvcreate
 # logvol swap --vgname=vg --name=lv_swap --size=4096 # --recommended # --ondisk=sda
 logvol / --fstype="xfs" --name=lv_root --vgname=vg --size=1 --grow
 
