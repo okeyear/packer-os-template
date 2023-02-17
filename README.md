@@ -12,7 +12,11 @@ netsh advfirewall firewall  add rule name="Allow packer http ports" dir=in actio
 - privide: hyper-v,vmware,virtualbox,qemu,vsphere,cloud(...)
 
 ## TODO
-规范化的写法，参考 https://github.com/AlmaLinux/cloud-images
+规范化的写法
+参考1 https://github.com/AlmaLinux/cloud-images
+参考2 https://github.com/goffinet/packer-kvm
+
+rhel/centos/rocky/almalinux 7/8/9 vmware/vsphere/hyper-v/virtualbox/azure os template
 
 ## How to start ?
 Command: 
