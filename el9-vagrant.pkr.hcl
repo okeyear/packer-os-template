@@ -5,7 +5,7 @@
 source "hyperv-iso" "el9" {
   iso_url               = var.iso_url_9_x86_64
   iso_checksum          = var.iso_checksum_9_x86_64
-  boot_command          = var.vagrant_boot_command_9_x86_64
+  boot_command          = var.vagrant_boot_command_9_x86_64_uefi
   boot_wait             = var.boot_wait
   generation            = 2
   switch_name           = var.hyperv_switch_name
