@@ -27,7 +27,7 @@ variables {
   // Hyper-V specific variables
   //
   # need external switch, for example , br-wifi
-  hyperv_switch_name = ""
+  hyperv_switch_name = "br-wifi"
 
   //
   // Vagrant specific variables

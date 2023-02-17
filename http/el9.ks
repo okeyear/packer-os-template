@@ -1,6 +1,8 @@
 # RHEL 9 kickstart file for Vagrant boxes
 
+# Use CDROM installation media
 cdrom
+repo --name="AppStream" --baseurl=file:///run/install/sources/mount-0000-cdrom/AppStream
 # url --url https://repo.almalinux.org/almalinux/9/BaseOS/x86_64/kickstart/
 # repo --name=BaseOS --baseurl=https://repo.almalinux.org/almalinux/9/BaseOS/x86_64/os/
 # repo --name=AppStream --baseurl=https://repo.almalinux.org/almalinux/9/AppStream/x86_64/os/
@@ -8,13 +10,20 @@ cdrom
 text
 skipx
 eula --agreed
+# Run the Setup Agent on first boot
 firstboot --disabled
 
+# Keyboard layouts
+keyboard --vckeymap=us --xlayouts='us'
+# System language
 # lang zh_CN
 lang en_US.UTF-8
-keyboard --vckeymap=us --xlayouts='us'
-timezone Asia/Shanghai
+# System timezone
+timezone Asia/Shanghai --utc
+# timesource --ntp-disable
 
+# Network information
+# network  --bootproto=static --device=ens192 --gateway=192.168.168.1 --ip=192.168.168.10 --netmask=255.255.255.0 --ipv6=auto --activate
 network --bootproto=dhcp --ipv6=auto --activate
 network --hostname=template9
 
@@ -26,21 +35,37 @@ selinux --disabled
 bootloader --location=mbr --append=" net.ifnames=0 biosdevname=0 crashkernel=no"
 # bootloader --append="rhgb quiet crashkernel=1G-4G:192M,4G-64G:256M,64G-:512M"
 
-# Clear the Master Boot Record
-zerombr
-# Remove partitions
-clearpart --all --initlabel
-# Automatically create partitions using LVM
-autopart --type=lvm
 
+
+######### disk partation, 1. manual create 
+# Generated using Blivet version 3.4.0
+ignoredisk --only-use=sda
+# Partition clearing information
+clearpart --none --initlabel
+# Disk partitioning information
+part /boot/efi --fstype="efi" --ondisk=sda --size=200 --fsoptions="umask=0077,shortname=winnt"
+part /boot --fstype="xfs" --ondisk=sda --size=1024
+part pv.01 --fstype="lvmpv" --ondisk=sda --size=1 --grow
+volgroup vg pv.01 --pesize=4096 
+# logvol swap --vgname=vg --name=lv_swap --size=4096 # --recommended # --ondisk=sda
+logvol / --fstype="xfs" --name=lv_root --vgname=vg --size=1 --grow
+
+#### 2. auto part
+# Clear the Master Boot Record
+# zerombr
+# Remove partitions
+# clearpart --all --initlabel
+# Automatically create partitions using LVM
+# autopart --type=lvm
+
+#### 3. refer almalinux: https://github.com/AlmaLinux/cloud-images
 # %pre --erroronfail
 # parted -s -a optimal /dev/sda -- mklabel gpt
 # parted -s -a optimal /dev/sda -- mkpart biosboot 1MiB 2MiB set 1 bios_grub on
 # parted -s -a optimal /dev/sda -- mkpart '"EFI System Partition"' fat32 2MiB 202MiB set 2 esp on
 # parted -s -a optimal /dev/sda -- mkpart boot xfs 202MiB 1226MiB
 # parted -s -a optimal /dev/sda -- mkpart root xfs 1226MiB 100%
-# %end
-# 
+# %end 
 # part biosboot --fstype=biosboot --onpart=sda1
 # part /boot/efi --fstype=efi --onpart=sda2
 # part /boot --fstype=xfs --onpart=sda3
@@ -52,33 +77,23 @@ user --name=vagrant --plaintext --password vagrant
 # Reboot after successful installation
 reboot --eject
 
-# -open-vm-tools
 
 %packages --inst-langs=en
 @core
 @^minimal-environment
-kexec-tools
-bzip2
-dracut-config-generic
-grub2-pc
-tar
-usermode
--biosdevname
--dnf-plugin-spacewalk
--dracut-config-rescue
--iprutils
--iwl*-firmware
--langpacks-*
--mdadm
--plymouth
--rhn*
+@development
 %end
+# -open-vm-tools
 
 
 # disable kdump service
 %addon com_redhat_kdump --disable
 %end
 
+# %addon com_redhat_oscap
+# content-type = scap-security-guide
+# profile = xccdf_org.ssgproject.content_profile_pci-dss
+# %end
 
 # %post --erroronfail
 %post
