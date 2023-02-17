@@ -1,7 +1,6 @@
 # packer-os-template
-build rhel/centos/rocky/almalinux os template
-
-- Packer Docs: https://developer.hashicorp.com/packer/plugins/builders/vmware/iso
+Build rhel/centos/rocky/almalinux os template via hashicorp packer.
+(Used for vagrant or public/private cloud)
 
 ## required
 - packer: https://developer.hashicorp.com/packer/docs
