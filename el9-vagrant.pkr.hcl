@@ -126,7 +126,13 @@ build {
     # }
 
     post-processor "shell-local" {
-      scripts = fileset(".", "scripts/{sshd,cleanup}.sh")
+      scripts = fileset(".", "shell/{sshd,cleanup}.sh")
+    }
+    post-processor "shell-local" {
+      scripts = fileset(".", "shell/azurevm_el8.sh")
+      only = [
+        "hyperv-iso.el9"
+      ]
     }
   }
 }
