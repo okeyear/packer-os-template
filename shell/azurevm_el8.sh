@@ -10,7 +10,7 @@ systemctl enable NetworkManager.service
 grub2-editenv - unset kernelopts
 sed -i '/^GRUB_CMDLINE_LINUX/s/=.*$/="console=tty1 console=ttyS0,115200n8 earlyprintk=ttyS0,115200 earlyprintk=ttyS0 net.ifnames=0"/' /etc/default/grub
 sed -i '/^GRUB_TERMINAL_OUTPUT/s/=.*$/="serial console"/' /etc/default/grub
-echi 'GRUB_SERIAL_COMMAND="serial --speed=115200 --unit=0 --word=8 --parity=no --stop=1"' | tee -a /etc/default/grub
+echo 'GRUB_SERIAL_COMMAND="serial --speed=115200 --unit=0 --word=8 --parity=no --stop=1"' | tee -a /etc/default/grub
 #  grub2-mkconfig -o /boot/grub2/grub.cfg
 grub2-mkconfig -o /boot/efi/EFI/redhat/grub.cfg
 
