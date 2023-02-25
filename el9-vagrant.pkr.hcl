@@ -27,7 +27,7 @@ source "hyperv-iso" "el9" {
 source "virtualbox-iso" "el9" {
   iso_url              = var.iso_url_9_x86_64
   iso_checksum         = var.iso_checksum_9_x86_64
-  boot_command          = var.vagrant_boot_command_9_x86_64
+  boot_command         = var.vagrant_boot_command_9_x86_64
   boot_wait            = var.boot_wait
   cpus                 = var.cpus
   memory               = var.memory
@@ -50,7 +50,7 @@ source "virtualbox-iso" "el9" {
 source "vmware-iso" "el9" {
   iso_url          = var.iso_url_9_x86_64
   iso_checksum     = var.iso_checksum_9_x86_64
-  boot_command          = var.vagrant_boot_command_9_x86_64
+  boot_command     = var.vagrant_boot_command_9_x86_64
   boot_wait        = var.boot_wait
   cpus             = var.cpus
   memory           = var.memory
@@ -77,9 +77,9 @@ source "vmware-iso" "el9" {
 
 build {
   sources = [
-    # "sources.hyperv-iso.el9"
+    "sources.hyperv-iso.el9"
     # "sources.virtualbox-iso.el9"
-     "sources.vmware-iso.el9"
+    # "sources.vmware-iso.el9"
   ]
 
   provisioner "shell" {

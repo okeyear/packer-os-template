@@ -15,10 +15,6 @@ variables {
   http_directory         = "http"
   ssh_timeout            = "3600s"
   root_shutdown_command  = "/sbin/shutdown -hP now"
-  qemu_binary            = ""
-  ovmf_code              = "/usr/share/OVMF/OVMF_CODE.secboot.fd"
-  ovmf_vars              = "/usr/share/OVMF/OVMF_VARS.secboot.fd"
-  aavmf_code             = "/usr/share/AAVMF/AAVMF_CODE.fd"
   vnc_bind_address       = "127.0.0.1"
   vnc_port_min           = 5900
   vnc_port_max           = 6000
@@ -26,7 +22,7 @@ variables {
   //
   // Hyper-V specific variables
   //
-  # need external switch, for example , br-wifi
+  # need external switch, for example , br-wifi， br-eth
   hyperv_switch_name = "br-wifi"
 
   //
@@ -59,7 +55,8 @@ variables {
     "initrdefi /images/pxeboot/initrd.img<enter>",
     "boot<enter><wait>"
   ]
-  vagrant_disk_size        = 20480
+  # Upload to Azure, need fixed size , not dynamic size, we only need 6G to install OS
+  vagrant_disk_size        = 6144
   vagrant_shutdown_command = "echo vagrant | sudo -S /sbin/shutdown -hP now"
   vagrant_ssh_username     = "vagrant"
   vagrant_ssh_password     = "vagrant"
