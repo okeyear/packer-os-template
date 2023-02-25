@@ -51,7 +51,7 @@ variables {
     "c<wait>",
     "linuxefi /images/pxeboot/vmlinuz inst.stage2=hd:LABEL=RHEL-9-1-0-BaseOS-x86_64-dvd ro ",
     "inst.text biosdevname=0 net.ifnames=0 ",
-    "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/el8.ks<enter>",
+    "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/el9.ks<enter>",
     "initrdefi /images/pxeboot/initrd.img<enter>",
     "boot<enter><wait>"
   ]
