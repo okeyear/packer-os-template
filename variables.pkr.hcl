@@ -56,7 +56,7 @@ variables {
     "boot<enter><wait>"
   ]
   # Upload to Azure, need fixed size , not dynamic size, we only need 6G to install OS
-  vagrant_disk_size        = 6144
+  vagrant_disk_size        = 8192
   vagrant_shutdown_command = "echo vagrant | sudo -S /sbin/shutdown -hP now"
   vagrant_ssh_username     = "vagrant"
   vagrant_ssh_password     = "vagrant"
