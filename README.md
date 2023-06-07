@@ -28,8 +28,8 @@ Command:
 # step 2
 # modify variables
 # step 3
-packer build rhel7.vmware.pkr.hcl
-packer build rhel9-vagrant.pkr.hcl
-packer build -var hyperv_switch_name="HyperV-vSwitch" -only="hyperv-iso.rhel9" .
+packer build rhel9.pkr.hcl
+packer build -only="vmware-iso.rhel9" .
+packer build -var hyperv_switch_name="br" -only="hyperv-iso.rhel9" .
 packer build -var hyperv_switch_name="br" -only="hyperv-iso.rhel9" rhel9.pkr.hcl
 ```
