@@ -1,12 +1,13 @@
 /*
- * AlmaLinux/CentOS/RockyLinux/RHEL 9 Packer template for building Vagrant boxes.
+ * Packer build OS template for AlmaLinux/CentOS/RockyLinux/RHEL
+ * Also for Vagrant boxes
  */
  
 ### part I. source
 source "hyperv-iso" "rhel9" {
-  iso_url               = var.iso_url_9_x86_64
-  iso_checksum          = var.iso_checksum_9_x86_64
-  boot_command          = var.vagrant_boot_command_9_x86_64_uefi
+  iso_url               = local.iso_url_9_x86_64
+  iso_checksum          = local.iso_checksum_9_x86_64
+  boot_command          = local.vagrant_boot_command_9_x86_64_uefi
   boot_wait             = var.boot_wait
   generation            = 2
   switch_name           = var.hyperv_switch_name
@@ -26,9 +27,9 @@ source "hyperv-iso" "rhel9" {
 
 
 source "virtualbox-iso" "rhel9" {
-  iso_url              = var.iso_url_9_x86_64
-  iso_checksum         = var.iso_checksum_9_x86_64
-  boot_command         = var.vagrant_boot_command_9_x86_64
+  iso_url              = local.iso_url_9_x86_64
+  iso_checksum         = local.iso_checksum_9_x86_64
+  boot_command         = local.vagrant_boot_command_9_x86_64_uefi
   boot_wait            = var.boot_wait
   cpus                 = var.cpus
   memory               = var.memory
@@ -49,9 +50,9 @@ source "virtualbox-iso" "rhel9" {
 
 
 source "vmware-iso" "rhel9" {
-  iso_url          = var.iso_url_9_x86_64
-  iso_checksum     = var.iso_checksum_9_x86_64
-  boot_command     = var.vagrant_boot_command_9_x86_64
+  iso_url          = local.iso_url_9_x86_64
+  iso_checksum     = local.iso_checksum_9_x86_64
+  boot_command     = local.vagrant_boot_command_9_x86_64_uefi
   boot_wait        = var.boot_wait
   cpus             = var.cpus
   memory           = var.memory
@@ -142,72 +143,160 @@ build {
 
 ### part III. variables
 
-# variable "os_ver" {
-#   description = "RHEL Based OS version"
+variable "os_ver" {
+  description = "RHEL Based OS version"
+  type    = string
+  default = "9.1"
+  validation {
+    condition     = can(regex("[5-9].[0-9]$|[5-9].[1-9][0-9]$", var.os_ver))
+    error_message = "The os_ver value must be one of released or prereleased versions of RHEL Based OS."
+  }
+}
 
-#   type    = string
-#   default = "9.1"
+locals {
+  os_ver_major = split(".", var.os_ver)[0]
+  os_ver_minor = split(".", var.os_ver)[1]
+}
 
-#   validation {
-#     condition     = can(regex("[5-9].[0-9]$|[5-9].[1-9][0-9]$", var.os_ver))
-#     error_message = "The os_ver value must be one of released or prereleased versions of RHEL Based OS."
-#   }
-# }
-
-# locals {
-#   os_ver_major = split(".", var.os_ver)[0]
-#   os_ver_minor = split(".", var.os_ver)[1]
-# }
-
-variables {
-  //
-  // common variables
-  //
-  os_ver                 = "9.1"
-  os_ver_major           = 9
-  os_ver_minor           = 1
-  iso_url_9_x86_64       = "file://D:/ISO/rhel-baseos-9.1-x86_64-dvd.iso"
+locals {
+  iso_url_9_x86_64       = "file://D:/ISO/rhel-baseos-${var.os_ver}-x86_64-dvd.iso"
   iso_checksum_9_x86_64  = "D9DCAE2B6E760D0F9DCF4A517BDDC227D5FA3F213A8323592F4A07A05AA542A2"
-  headless               = false
-  boot_wait              = "10s"
-  cpus                   = 2
-  memory                 = 2048
-  post_cpus              = 1
-  post_memory            = 1024
-  http_directory         = "http"
-  ssh_timeout            = "3600s"
-  root_shutdown_command  = "/sbin/shutdown -hP now"
-  vnc_bind_address       = "127.0.0.1"
-  vnc_port_min           = 5900
-  vnc_port_max           = 6000
+}
 
-  //
-  // Hyper-V specific variables
-  //
-  # need external switch, for example : br, br-wifi， br-eth
-  # hyperv_switch_name = "br-wifi"
 
-  //
-  // Vagrant specific variables
-  //
+# common variables
+
+variable "headless" {
+  description = "Disable GUI"
+
+  type    = bool
+  default = false
+}
+
+variable "boot_wait" {
+  description = "Time to wait before typing boot command"
+
+  type    = string
+  default = "10s"
+}
+
+variable "cpus" {
+  description = "The number of virtual cpus"
+
+  type    = number
+  default = 2
+}
+
+variable "memory" {
+  description = "The amount of memory"
+
+  type    = number
+  default = 2048
+}
+
+variable "post_cpus" {
+  description = "The number of virtual cpus after the build"
+
+  type    = number
+  default = 1
+}
+
+variable "post_memory" {
+  description = "The number of virtual cpus after the build"
+
+  type    = number
+  default = 1024
+}
+
+variable "http_directory" {
+  description = "Path to a directory to serve kickstart files"
+
+  type    = string
+  default = "http"
+}
+
+variable "ssh_timeout" {
+  description = "The time to wait for SSH to become available"
+
+  type    = string
+  default = "3600s"
+}
+
+variable "root_shutdown_command" {
+  description = "The command to use to gracefully shut down the machine"
+
+  type    = string
+  default = "/sbin/shutdown -hP now"
+}
+
+# Vagrant
+
+variable "vagrant_disk_size" {
+  # Upload to Azure Cloud, need fixed size , not dynamic size; reduce disk sizeGB to 8G
+  description = "The size in MiB of hard disk of VM"
+
+  type    = number
+  default = 8192
+}
+
+variable "vagrant_shutdown_command" {
+  description = "The command to use to gracefully shut down the machine"
+
+  type    = string
+  default = "echo vagrant | sudo -S /sbin/shutdown -hP now"
+}
+
+variable "vagrant_ssh_username" {
+  description = "The username to connect to SSH with"
+
+  type    = string
+  default = "vagrant"
+}
+
+variable "vagrant_ssh_password" {
+  description = "A plaintext password to use to authenticate with SSH"
+
+  type    = string
+  default = "vagrant"
+}
+
+
+local "vagrant_boot_command_9_x86_64_uefi" {
   # rhel iso label: RHEL-9-1-0-BaseOS-x86_64
   # alma iso label: AlmaLinux-8-7-x86_64-dvd AlmaLinux-9-1-x86_64-dvd "linuxefi /images/pxeboot/vmlinuz inst.stage2=hd:LABEL=AlmaLinux-8-7-x86_64-dvd ro ",
   # rocky iso label:
-  vagrant_boot_command_9_x86_64 = [
-    "<tab> inst.text inst.gpt inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/rhel9.ks<enter><wait>"
-  ]
-  vagrant_boot_command_9_x86_64_uefi = [
-    "c<wait>",
-    "linuxefi /images/pxeboot/vmlinuz inst.stage2=hd:LABEL=RHEL-9-1-0-BaseOS-x86_64-dvd ro ",
-    "inst.text biosdevname=0 net.ifnames=0 ",
-    "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/rhel9.ks<enter>",
-    "initrdefi /images/pxeboot/initrd.img<enter>",
+  expression = [
+    "c",
+    "<wait>",
+    "linuxefi /images/pxeboot/vmlinuz",
+    " inst.stage2=hd:LABEL=RHEL-9-${local.os_ver_minor}-0-BaseOS-x86_64-dvd ro",
+    " inst.text biosdevname=0 net.ifnames=0",
+    " inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/rhel9.ks",
+    "<enter>",
+    "initrdefi /images/pxeboot/initrd.img",
+    "<enter>",
     "boot<enter><wait>"
   ]
-  # Upload to Azure Cloud, need fixed size , not dynamic size; reduce disk sizeGB to 8G
-  vagrant_disk_size        = 8192
-  vagrant_shutdown_command = "echo vagrant | sudo -S /sbin/shutdown -hP now"
-  vagrant_ssh_username     = "vagrant"
-  vagrant_ssh_password     = "vagrant"
 }
 
+variable "vagrant_boot_command_9_x86_64_bios" {
+  description = "Boot command for x86_64 BIOS"
+
+  type = list(string)
+  default = [
+    "<tab>",
+    "inst.text inst.gpt inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/rhel9.ks",
+    "<enter><wait>"
+  ]
+}
+
+
+# Hyper-V
+
+variable "hyperv_switch_name" {
+  description = "The name of the switch to connect the virtual machine to"
+  # need external switch, for example : br, br-wifi， br-eth
+  # hyperv_switch_name = "br-wifi"
+  type    = string
+  default = null
+}
