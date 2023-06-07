@@ -1,6 +1,7 @@
 /*
  * AlmaLinux/CentOS/RockyLinux/RHEL 9 Packer template for building Vagrant boxes.
  */
+ 
 ### part I. source
 source "hyperv-iso" "rhel9" {
   iso_url               = var.iso_url_9_x86_64
@@ -78,9 +79,9 @@ source "vmware-iso" "rhel9" {
 
 build {
   sources = [
-    "sources.hyperv-iso.rhel9"
+    # "sources.hyperv-iso.rhel9"
     # "sources.virtualbox-iso.rhel9"
-    # "sources.vmware-iso.rhel9"
+    "sources.vmware-iso.rhel9"
   ]
 
   provisioner "shell" {
@@ -138,30 +139,34 @@ build {
   }
 }
 
+
 ### part III. variables
 
-variable "os_ver" {
-  description = "RHEL Based OS version"
+# variable "os_ver" {
+#   description = "RHEL Based OS version"
 
-  type    = string
-  default = "9.1"
+#   type    = string
+#   default = "9.1"
 
-  validation {
-    condition     = can(regex("[5-9].[0-9]$|[5-9].[1-9][0-9]$", var.os_ver))
-    error_message = "The os_ver value must be one of released or prereleased versions of RHEL Based OS."
-  }
-}
+#   validation {
+#     condition     = can(regex("[5-9].[0-9]$|[5-9].[1-9][0-9]$", var.os_ver))
+#     error_message = "The os_ver value must be one of released or prereleased versions of RHEL Based OS."
+#   }
+# }
 
-locals {
-  os_ver_major = split(".", var.os_ver)[0]
-  os_ver_minor = split(".", var.os_ver)[1]
-}
+# locals {
+#   os_ver_major = split(".", var.os_ver)[0]
+#   os_ver_minor = split(".", var.os_ver)[1]
+# }
 
 variables {
   //
   // common variables
   //
-  iso_url_9_x86_64       = "file://D:/ISO/rhel-baseos-${var.os_ver}-x86_64-dvd.iso"
+  os_ver                 = "9.1"
+  os_ver_major           = 9
+  os_ver_minor           = 1
+  iso_url_9_x86_64       = "file://D:/ISO/rhel-baseos-9.1-x86_64-dvd.iso"
   iso_checksum_9_x86_64  = "D9DCAE2B6E760D0F9DCF4A517BDDC227D5FA3F213A8323592F4A07A05AA542A2"
   headless               = false
   boot_wait              = "10s"
@@ -193,7 +198,7 @@ variables {
   ]
   vagrant_boot_command_9_x86_64_uefi = [
     "c<wait>",
-    "linuxefi /images/pxeboot/vmlinuz inst.stage2=hd:LABEL=RHEL-${local.os_ver_major}-${local.os_ver_minor}-0-BaseOS-x86_64-dvd ro ",
+    "linuxefi /images/pxeboot/vmlinuz inst.stage2=hd:LABEL=RHEL-9-1-0-BaseOS-x86_64-dvd ro ",
     "inst.text biosdevname=0 net.ifnames=0 ",
     "inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/rhel9.ks<enter>",
     "initrdefi /images/pxeboot/initrd.img<enter>",
@@ -205,3 +210,4 @@ variables {
   vagrant_ssh_username     = "vagrant"
   vagrant_ssh_password     = "vagrant"
 }
+
