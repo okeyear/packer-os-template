@@ -80,8 +80,8 @@ source "vmware-iso" "rhel9" {
 
 build {
   sources = [
-    "sources.hyperv-iso.rhel9"
-    "sources.virtualbox-iso.rhel9"
+    "sources.hyperv-iso.rhel9",
+    "sources.virtualbox-iso.rhel9",
     "sources.vmware-iso.rhel9"
   ]
 
