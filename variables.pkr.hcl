@@ -128,7 +128,7 @@ local "vagrant_boot_command_9_x86_64_uefi" {
     "c",
     "<wait>",
     "linuxefi /images/pxeboot/vmlinuz",
-    " inst.stage2=hd:LABEL=RHEL-9-${local.os_ver_minor}-0-BaseOS-x86_64-dvd ro",
+    " inst.stage2=hd:LABEL=RHEL-9-${local.os_ver_minor}-0-BaseOS-x86_64 ro",
     " inst.text biosdevname=0 net.ifnames=0",
     " inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/rhel9.ks",
     "<enter>",
@@ -144,7 +144,7 @@ variable "vagrant_boot_command_9_x86_64_bios" {
   type = list(string)
   default = [
     "<tab>",
-    "inst.text inst.gpt inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/rhel9.ks",
+    "inst.text inst.gpt biosdevname=0 net.ifnames=0 inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/rhel9.ks",
     "<enter><wait>"
   ]
 }
