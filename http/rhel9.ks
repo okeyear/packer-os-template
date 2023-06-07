@@ -2,8 +2,10 @@
 
 # Use CDROM installation media
 cdrom
-repo --name="BaseOS" --baseurl=file:///run/install/sources/mount-0000-cdrom/BaseOS
-repo --name="AppStream" --baseurl=file:///run/install/sources/mount-0000-cdrom/AppStream
+# repo --name="BaseOS" --baseurl=file:///run/install/sources/mount-0000-cdrom/BaseOS
+# repo --name="AppStream" --baseurl=file:///run/install/sources/mount-0000-cdrom/AppStream
+repo --name="BaseOS" --baseurl=file:///run/install/repo/BaseOS
+repo --name="AppStream" --baseurl=file:///run/install/repo/AppStream
 # url --url https://repo.almalinux.org/almalinux/9/BaseOS/x86_64/kickstart/
 # repo --name=BaseOS --baseurl=https://repo.almalinux.org/almalinux/9/BaseOS/x86_64/os/
 # repo --name=AppStream --baseurl=https://repo.almalinux.org/almalinux/9/AppStream/x86_64/os/
