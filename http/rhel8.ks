@@ -1,4 +1,4 @@
-# RHEL 9 kickstart file for Vagrant boxes
+# RHEL 8 kickstart file for Vagrant boxes
 
 # Use CDROM installation media
 cdrom
@@ -87,7 +87,7 @@ user --name=vagrant --plaintext --password vagrant
 reboot --eject
 
 
-%packages --inst-langs=en
+%packages --ignoremissing --excludedocs --instLangs=en_US.UTF-8
 @core
 @^minimal-environment
 @development
