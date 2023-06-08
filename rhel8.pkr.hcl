@@ -52,7 +52,7 @@ source "virtualbox-iso" "rhel8" {
 source "vmware-iso" "rhel8" {
   iso_url          = local.iso_url_8_x86_64
   iso_checksum     = local.iso_checksum_8_x86_64
-  boot_command     = local.vagrant_boot_command_8_x86_64_uefi
+  boot_command     = local.vagrant_boot_command_8_x86_64_bios
   boot_wait        = var.boot_wait
   cpus             = var.cpus
   memory           = var.memory
