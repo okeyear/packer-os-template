@@ -146,7 +146,7 @@ variable "vagrant_boot_command_8_x86_64_bios" {
   type = list(string)
   default = [
     "<tab>",
-    "inst.text inst.gpt biosdevname=0 net.ifnames=0 inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/rhel8.ks",
+    " inst.text inst.gpt biosdevname=0 net.ifnames=0 inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/rhel8.ks",
     "<enter><wait>"
   ]
 }
@@ -176,7 +176,7 @@ variable "vagrant_boot_command_9_x86_64_bios" {
   type = list(string)
   default = [
     "<tab>",
-    "inst.text inst.gpt biosdevname=0 net.ifnames=0 inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/rhel9.ks",
+    " inst.text inst.gpt biosdevname=0 net.ifnames=0 inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/rhel9.ks",
     "<enter><wait>"
   ]
 }
