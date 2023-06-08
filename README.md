@@ -20,6 +20,10 @@ netsh advfirewall firewall  add rule name="Allow packer http ports" dir=in actio
 
 rhel/centos/rocky/almalinux 7/8/9 vmware/vsphere/hyper-v/virtualbox/azure os template
 
+```shell
+packer在vm重启后，一直SSH 连接不上，需要在VM的sshd中修改 PasswordAuthentication no --> PasswordAuthentication yes
+```
+
 ## How to start ?
 Command: 
 ```shell
