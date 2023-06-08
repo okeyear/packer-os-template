@@ -31,7 +31,7 @@ network --bootproto=dhcp --ipv6=auto --activate
 network --hostname=template9
 
 firewall --disabled --ssh
-services --enabled=sshd
+services --enabled=sshd,rsyslog,sshd,NetworkManager
 selinux --disabled
 # selinux --enforcing
 
