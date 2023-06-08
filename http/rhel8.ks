@@ -28,7 +28,7 @@ timezone Asia/Shanghai --utc
 # Network information
 # network  --bootproto=static --device=ens192 --gateway=192.168.168.1 --ip=192.168.168.10 --netmask=255.255.255.0 --ipv6=auto --activate
 network --bootproto=dhcp --ipv6=auto --activate
-network --hostname=template9
+network --hostname=template8
 
 firewall --disabled --ssh
 services --enabled=sshd,rsyslog,sshd,NetworkManager
