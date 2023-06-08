@@ -95,6 +95,11 @@ build {
     # ]
   }
 
+  # provisioner "shell" {
+  #   execute_command = "{{ .Vars }} sudo -E bash '{{ .Path }}'"
+  #   inline          = ["yum -y install epel-release", "yum repolist", "yum -y install ansible"]
+  # }
+
   # provisioner "ansible" {
   #   user             = "vagrant"
   #   use_proxy        = false
