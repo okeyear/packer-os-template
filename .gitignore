@@ -1,3 +1,4 @@
 packer_cache
 vmware-iso
 output*
+*.log

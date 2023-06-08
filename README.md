@@ -28,6 +28,10 @@ Command:
 # step 2
 # modify variables
 # step 3
+# debug
+# $env:PACKER_LOG=1
+# $env:PACKER_LOG_PATH="packer.log"
+# packer build -debug
 packer build rhel9.pkr.hcl
 packer build -only="vmware-iso.rhel9" .
 packer build -var os_ver="8.7" -only="vmware-iso.rhel8" .
