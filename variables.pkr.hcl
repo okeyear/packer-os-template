@@ -19,7 +19,7 @@ locals {
 
 locals {
   iso_url_8_x86_64       = "file://D:/ISO/rhel-${var.os_ver}-x86_64-dvd.iso"
-  iso_checksum_8_x86_64  = "D9DCAE2B6E760D0F9DCF4A517BDDC227D5FA3F213A8323592F4A07A05AA542A2"
+  iso_checksum_8_x86_64  = "A6A7418A75D721CC696D3CBDD648B5248808E7FEF0F8742F518E43B46FA08139"
   iso_url_9_x86_64       = "file://D:/ISO/rhel-${var.os_ver}-x86_64-dvd.iso"
   iso_checksum_9_x86_64  = "D9DCAE2B6E760D0F9DCF4A517BDDC227D5FA3F213A8323592F4A07A05AA542A2"
 }
