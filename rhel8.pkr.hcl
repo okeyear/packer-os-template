@@ -86,13 +86,6 @@ build {
   ]
 
   provisioner "shell" {
-    expect_disconnect = true
-    inline = [
-      "sudo rm -fr /etc/ssh/*host*key*"
-    ]
-  }
-
-  provisioner "shell" {
       scripts = fileset(".", "shell/{sshd,cleanup}.sh")
     }
 
