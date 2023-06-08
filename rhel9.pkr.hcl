@@ -95,6 +95,17 @@ build {
     # ]
   }
 
+  provisioner "shell" {
+      scripts = fileset(".", "shell/{sshd,cleanup}.sh")
+    }
+
+  provisioner "shell" {
+      scripts = fileset(".", "shell/azurevm_el8.sh")
+      only = [
+        "hyperv-iso.rhel9"
+      ]
+    }
+
   # provisioner "shell" {
   #   execute_command = "{{ .Vars }} sudo -E bash '{{ .Path }}'"
   #   inline          = ["yum -y install epel-release", "yum repolist", "yum -y install ansible"]
@@ -132,16 +143,17 @@ build {
     #     "parallels-iso.almalinux-9-aarch64"
     #   ]
     # }
+    
+    # post-processor "shell-local" {
+    # environment_vars = ["IMAGE_NAME=${var.name}", "IMAGE_VERSION=${var.version}", "DESTINATION_SERVER=${var.destination_server}"]
+    # script           = "scripts/push-image.sh"
+    # }
 
     post-processor "shell-local" {
-      scripts = fileset(".", "shell/{sshd,cleanup}.sh")
+      environment_vars = ["PROVISIONERTEST=ProvisionerTest2"]
+      inline           = ["echo hello", "echo $PROVISIONERTEST"]
     }
-    post-processor "shell-local" {
-      scripts = fileset(".", "shell/azurevm_el8.sh")
-      only = [
-        "hyperv-iso.rhel9"
-      ]
-    }
+
   }
 }
 

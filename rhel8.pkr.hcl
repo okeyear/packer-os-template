@@ -92,6 +92,22 @@ build {
     ]
   }
 
+  provisioner "shell" {
+      scripts = fileset(".", "shell/{sshd,cleanup}.sh")
+    }
+
+  provisioner "shell" {
+      scripts = fileset(".", "shell/azurevm_el8.sh")
+      only = [
+        "hyperv-iso.rhel8"
+      ]
+    }
+  
+  # provisioner "shell" {
+  #   execute_command = "{{ .Vars }} sudo -E bash '{{ .Path }}'"
+  #   inline          = ["yum -y install epel-release", "yum repolist", "yum -y install ansible"]
+  # }
+
   # provisioner "ansible" {
   #   user             = "vagrant"
   #   use_proxy        = false
@@ -114,7 +130,6 @@ build {
   # }
 
   post-processors {
-
     # post-processor "vagrant" {
     #   compression_level = "9"
     #   output            = "AlmaLinux-9-Vagrant-9.1-${formatdate("YYYYMMDD", timestamp())}.x86_64.{{.Provider}}.box"
@@ -124,15 +139,14 @@ build {
     #     "parallels-iso.almalinux-9-aarch64"
     #   ]
     # }
-
+    
+    # post-processor "shell-local" {
+    # environment_vars = ["IMAGE_NAME=${var.name}", "IMAGE_VERSION=${var.version}", "DESTINATION_SERVER=${var.destination_server}"]
+    # script           = "scripts/push-image.sh"
+    # }
     post-processor "shell-local" {
-      scripts = fileset(".", "shell/{sshd,cleanup}.sh")
-    }
-    post-processor "shell-local" {
-      scripts = fileset(".", "shell/azurevm_el8.sh")
-      only = [
-        "hyperv-iso.rhel8"
-      ]
+      environment_vars = ["PROVISIONERTEST=ProvisionerTest2"]
+      inline           = ["echo hello", "echo $PROVISIONERTEST"]
     }
   }
 }
