@@ -18,7 +18,9 @@ locals {
 }
 
 locals {
-  iso_url_9_x86_64       = "file://D:/ISO/rhel-baseos-${var.os_ver}-x86_64-dvd.iso"
+  iso_url_8_x86_64       = "file://D:/ISO/rhel-${var.os_ver}-x86_64-dvd.iso"
+  iso_checksum_8_x86_64  = "D9DCAE2B6E760D0F9DCF4A517BDDC227D5FA3F213A8323592F4A07A05AA542A2"
+  iso_url_9_x86_64       = "file://D:/ISO/rhel-${var.os_ver}-x86_64-dvd.iso"
   iso_checksum_9_x86_64  = "D9DCAE2B6E760D0F9DCF4A517BDDC227D5FA3F213A8323592F4A07A05AA542A2"
 }
 
@@ -117,6 +119,36 @@ variable "vagrant_ssh_password" {
 
   type    = string
   default = "vagrant"
+}
+
+
+local "vagrant_boot_command_8_x86_64_uefi" {
+  # rhel iso label: RHEL-9-1-0-BaseOS-x86_64 LABEL=RHEL-8-7-0-BaseOS-x86_64
+  # alma iso label: AlmaLinux-8-7-x86_64-dvd AlmaLinux-9-1-x86_64-dvd "linuxefi /images/pxeboot/vmlinuz inst.stage2=hd:LABEL=AlmaLinux-8-7-x86_64-dvd ro ",
+  # rocky iso label:
+  expression = [
+    "c",
+    "<wait>",
+    "linuxefi /images/pxeboot/vmlinuz",
+    " inst.stage2=hd:LABEL=RHEL-8-${local.os_ver_minor}-0-BaseOS-x86_64 ro",
+    " inst.text biosdevname=0 net.ifnames=0",
+    " inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/rhel8.ks",
+    "<enter>",
+    "initrdefi /images/pxeboot/initrd.img",
+    "<enter>",
+    "boot<enter><wait>"
+  ]
+}
+
+variable "vagrant_boot_command_8_x86_64_bios" {
+  description = "Boot command for x86_64 BIOS"
+
+  type = list(string)
+  default = [
+    "<tab>",
+    "inst.text inst.gpt biosdevname=0 net.ifnames=0 inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/rhel8.ks",
+    "<enter><wait>"
+  ]
 }
 
 
