@@ -1,8 +1,8 @@
 # AlmaLinux 9 kickstart file for Vagrant boxes
 
 # Use CDROM installation media
-cdrom
-# url --url https://repo.almalinux.org/almalinux/9/BaseOS/x86_64/kickstart/
+# cdrom
+url --url https://mirrors.aliyun.com/almalinux/9/BaseOS/x86_64/kickstart
 repo --name=BaseOS --baseurl=https://mirrors.aliyun.com/almalinux/9/BaseOS/x86_64/os/
 repo --name=AppStream --baseurl=https://mirrors.aliyun.com/almalinux/9/AppStream/x86_64/os/
 
