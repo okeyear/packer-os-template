@@ -27,7 +27,6 @@ locals {
   almalinux_iso_url_9_x86_64       = "https://mirrors.aliyun.com/almalinux/${var.os_ver}/isos/x86_64/AlmaLinux-${var.os_ver}-x86_64-boot.iso"
   almalinux_iso_checksum_9_x86_64  = "file:https://mirrors.aliyun.com/almalinux/${var.os_ver}/isos/x86_64/CHECKSUM"
 }
-https://mirrors.aliyun.com/almalinux/9/isos/x86_64
 
 
 # common variables
