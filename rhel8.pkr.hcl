@@ -85,16 +85,16 @@ build {
     "sources.vmware-iso.rhel8"
   ]
 
-  provisioner "shell" {
-      scripts = fileset(".", "shell/{sshd,cleanup}.sh")
-    }
-
-  provisioner "shell" {
-      scripts = fileset(".", "shell/azurevm_el8.sh")
-      only = [
-        "hyperv-iso.rhel8"
-      ]
-    }
+  # provisioner "shell" {
+  #     scripts = fileset(".", "shell/{sshd,cleanup}.sh")
+  #   }
+# 
+  # provisioner "shell" {
+  #     scripts = fileset(".", "shell/azurevm_el8.sh")
+  #     only = [
+  #       "hyperv-iso.rhel8"
+  #     ]
+  #   }
   
   # provisioner "shell" {
   #   execute_command = "{{ .Vars }} sudo -E bash '{{ .Path }}'"
